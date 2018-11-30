@@ -1,13 +1,14 @@
 import { FirstComponent, SecondComponent } from "./firstComponent.tsx";
 
 export const FormFields = {
+  debtors: { primary: { name: "fieldN" } },
   fieldOne: {
     name: "My first field",
     id: "fieldOne",
     active: true,
     RenderComp: FirstComponent,
     dependencies: {
-      fields: []
+      fields: ["fieldN"]
     }
   },
   fieldTwo: {
@@ -16,7 +17,7 @@ export const FormFields = {
     active: false,
     RenderComp: SecondComponent,
     dependencies: {
-      fields: ["fieldN"]
+      fields: ["debtors.primary.name"]
     }
   },
   fieldN: {
@@ -25,7 +26,18 @@ export const FormFields = {
     active: true,
     RenderComp: SecondComponent,
     dependencies: {
-      fields: ["fieldThree"]
+      fields: []
     }
   }
 };
+
+// TEST TEST
+// we could destructre the dependencies from "dot notation"
+// and get the corresponding data
+// SAMPLE split!
+// join this with the recursive decorator
+const n = FormFields.fieldTwo.dependencies.fields[0]
+  .split(".")
+  .reduce((acc, name) => acc[name], FormFields);
+
+console.log(n);
