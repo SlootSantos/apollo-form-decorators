@@ -1,14 +1,16 @@
 import { FormFields } from "./FormFields";
 import { FormComponent, FormFieldKey } from "./interfaces";
 
-function checkActiveDependencies(fieldId: FormFieldKey) {
-  const { name, active, dependencies } = FormFields[fieldId];
-  if (!active) return false;
+// recursive magic!
+// I'm not quite sure about O(n) yet... do we even care?
+function checkActiveDependencies(fieldId: FormFieldKey): boolean {
+  const { active, dependencies } = FormFields[fieldId];
 
   return active && dependencies.fields.every(checkActiveDependencies);
 }
 
-export function filterRenderables(BaseClass: FormComponent) {
+// decorator to to decide which field to render
+export function filterRenderables(BaseClass: FormComponent): FormComponent {
   return class extends BaseClass {
     activeFields = BaseClass.fieldsToRender.filter(checkActiveDependencies);
   };

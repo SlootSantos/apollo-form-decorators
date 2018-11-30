@@ -4,15 +4,16 @@ import { FormFields } from "./FormFields";
 import { filterRenderables } from "./decorator";
 import { FormComponent, FormFieldKey } from "./interfaces";
 
-@filterRenderables
+@filterRenderables // maaaaagic
 class AnyView extends React.Component<FormComponent> {
-  static fieldsToRender = ["fieldOne", "fieldTwo"];
+  static fieldsToRender: FormFieldKey[] = ["fieldOne", "fieldTwo"];
+  static activeFields: FormFieldKey[]; // will be added implicitly by decorator
 
   renderMyFields = (): JSX.Element[] =>
     this.activeFields.map((fieldId: FormFieldKey) => {
       const { name, RenderComp } = FormFields[fieldId];
 
-      return <RenderComp name={name} />;
+      return <RenderComp key={fieldId} name={name} />;
     });
 
   render() {
@@ -20,7 +21,7 @@ class AnyView extends React.Component<FormComponent> {
   }
 }
 
-const App = () => (
+const App = (): JSX.Element => (
   <div>
     <AnyView />
   </div>

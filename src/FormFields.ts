@@ -16,7 +16,7 @@ export const FormFields = {
     active: false,
     RenderComp: SecondComponent,
     dependencies: {
-      fields: ["fieldOne", "fieldN"]
+      fields: ["fieldN"]
     }
   },
   fieldN: {
