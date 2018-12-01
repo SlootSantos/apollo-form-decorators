@@ -15,3 +15,12 @@ export function filterRenderables(BaseClass: FormComponent): FormComponent {
     activeFields = BaseClass.fieldsToRender.filter(checkActiveDependencies);
   };
 }
+
+export function decorateRender(target, x, y) {
+  const orgFn = y.value;
+  y.value = function() {
+    this.activeFields = this.fieldsToRender.filter(checkActiveDependencies);
+    return orgFn.call(this);
+  };
+  return y;
+}

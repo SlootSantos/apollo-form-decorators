@@ -1,21 +1,49 @@
 import * as React from "react";
 import { render } from "react-dom";
 import { FormFields } from "./FormFields";
-import { filterRenderables } from "./decorator";
+import { filterRenderables, decorateRender } from "./decorator";
 import { FormComponent, FormFieldKey } from "./interfaces";
+import SampleComponent from "./idea.component.tsx";
 
-@filterRenderables // maaaaagic
+class PseudoFieldN extends React.Component {
+  setActiveInFakeState = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value) {
+      FormFields.fieldN.active = true;
+    } else {
+      FormFields.fieldN.active = false;
+    }
+  };
+  render() {
+    return (
+      <input
+        type="text"
+        onChange={this.setActiveInFakeState}
+        placeholder="fieldN"
+      />
+    );
+  }
+}
+
+//@filterRenderables // maaaaagic
 class AnyView extends React.Component<FormComponent> {
-  static fieldsToRender: FormFieldKey[] = ["fieldOne", "fieldTwo"];
-  static activeFields: FormFieldKey[]; // will be added implicitly by decorator
+  fieldsToRender: FormFieldKey[] = ["fieldOne", "fieldTwo"];
+  activeFields: FormFieldKey[]; // will be added implicitly by decorator
 
-  renderMyFields = (): JSX.Element[] =>
-    this.activeFields.map((fieldId: FormFieldKey) => {
+  constructor(props) {
+    super(props);
+    // I rerender every 5 seconds.. because i'm to stupid to set up observerables
+    setInterval(() => this.setState({}), 100);
+  }
+
+  renderMyFields = (): JSX.Element[] => {
+    return this.activeFields.map((fieldId: FormFieldKey) => {
       const { name, RenderComp } = FormFields[fieldId];
 
       return <RenderComp key={fieldId} name={name} />;
     });
+  };
 
+  @decorateRender
   render() {
     return <div>{this.renderMyFields()}</div>;
   }
@@ -23,6 +51,7 @@ class AnyView extends React.Component<FormComponent> {
 
 const App = (): JSX.Element => (
   <div>
+    <PseudoFieldN />
     <AnyView />
   </div>
 );
