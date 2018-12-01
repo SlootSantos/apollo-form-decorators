@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as R from "ramda";
 import { render } from "react-dom";
 import { FormFields } from "./FormFields";
 import { filterRenderables, decorateRender } from "./decorator";
@@ -42,7 +43,6 @@ class AnyView extends React.Component<FormComponent> {
       return <RenderComp key={fieldId} name={name} />;
     });
   };
-
   @decorateRender
   render() {
     return <div>{this.renderMyFields()}</div>;

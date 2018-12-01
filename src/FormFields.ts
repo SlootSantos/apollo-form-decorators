@@ -6,7 +6,7 @@ export const FormFields = {
     name: "My first field",
     id: "fieldOne",
     active: true,
-    RenderComp: FirstComponent,
+    //RenderComp: FirstComponent,
     dependencies: {
       fields: ["fieldN"]
     }
@@ -14,10 +14,10 @@ export const FormFields = {
   fieldTwo: {
     name: "My second field",
     id: "fieldOne",
-    active: false,
+    active: true,
     RenderComp: SecondComponent,
     dependencies: {
-      fields: ["debtors.primary.name"]
+      fields: ["fieldOne"]
     }
   },
   fieldN: {

@@ -10,17 +10,19 @@ function checkActiveDependencies(fieldId: FormFieldKey): boolean {
 }
 
 // decorator to to decide which field to render
+// maybe we don't need to do this on statics if we decorate render fn
 export function filterRenderables(BaseClass: FormComponent): FormComponent {
   return class extends BaseClass {
     activeFields = BaseClass.fieldsToRender.filter(checkActiveDependencies);
   };
 }
 
-export function decorateRender(target, x, y) {
-  const orgFn = y.value;
-  y.value = function() {
+// will this hit performance?
+export function decorateRender(__, _, descriptor: any) {
+  const originalRenderFn = descriptor.value;
+  descriptor.value = function() {
     this.activeFields = this.fieldsToRender.filter(checkActiveDependencies);
-    return orgFn.call(this);
+    return originalRenderFn.call(this);
   };
-  return y;
+  return descriptor;
 }

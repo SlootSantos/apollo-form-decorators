@@ -98,3 +98,19 @@ class ViewXY {
     // <PersonalComponent />
   }
 }
+
+
+///////////////////////////////////////////
+// Curry recursive depdency checker
+
+const checkActiveDependencies = (config: any) => (fieldId: any): boolean {
+  const { active, dependencies } = FormFields[fieldId];
+  // bla bla check config
+
+  return active && dependencies.fields.every(checkActiveDependencies(config));
+}
+const isRentner = () => 'FormFieldKey.beruf' === 'STATIC.RENTNER'
+const exampleConfig = [isRentner]
+
+const partial: any = checkActiveDependencies(exampleConfig)
+const v = [1].filter(partial)
